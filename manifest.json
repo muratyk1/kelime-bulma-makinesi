@@ -1,29 +1,16 @@
 {
-  "name": "Kelime Bulucu - Türkçe Scrabble",
-  "short_name": "Kelime Bulucu",
+  "name": "Kelime Bulma Makinesi",
+  "short_name": "Kelime Bul",
   "description": "Türkçe Scrabble için elinizdeki harflerle yazılabilecek kelimeleri bulun",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#000000",
-  "theme_color": "#000000",
+  "background_color": "#0a1628",
+  "theme_color": "#0a1628",
   "orientation": "portrait",
   "lang": "tr",
   "icons": [
-    {
-      "src": "icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png"
-    },
-    {
-      "src": "icon-192.png",
-      "sizes": "180x180",
-      "type": "image/png",
-      "purpose": "apple touch icon"
-    }
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icon-192.png", "sizes": "180x180", "type": "image/png", "purpose": "apple touch icon" }
   ]
 }

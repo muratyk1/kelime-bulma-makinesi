@@ -407,6 +407,7 @@ function findWords() {
   const matched = [];
   TURKISH_WORDS.forEach(word => {
     if (seen.has(word)) return;
+    if (word.length < 2) return;
     if (sw && !word.startsWith(sw)) return;
     if (ew && !word.endsWith(ew))   return;
     if (ct && !word.includes(ct))   return;
