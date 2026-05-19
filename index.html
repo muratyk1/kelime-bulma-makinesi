@@ -106,6 +106,12 @@
   .settings-label { font-size: 16px; color: var(--text); }
   .settings-value { font-size: 15px; color: var(--text2); }
   .settings-note { font-size: 13px; color: var(--text3); margin-bottom: 6px; padding: 0 4px; }
+  .help-grid { display: flex; flex-direction: column; gap: 10px; margin-bottom: 12px; }
+  .help-card { background: var(--bg3); border-radius: var(--radius); padding: 14px 16px; border: 1px solid var(--border-light); display: flex; gap: 12px; align-items: flex-start; }
+  .help-icon { font-size: 22px; flex-shrink: 0; padding-top: 1px; }
+  .help-body h3 { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 5px; }
+  .help-body p { font-size: 13px; color: var(--text2); line-height: 1.55; }
+  .help-body strong { color: var(--text); }
 </style>
 </head>
 <body>
@@ -301,7 +307,38 @@ function scrollToTop() {
 function showEmpty(title, sub) {
   const area = document.getElementById('resultsArea');
   if (!currentResults.length) {
-    area.innerHTML = `<div class="hint-card"><div class="hint-row"><div class="hint-icon">💡</div><div class="hint-content"><h3>Nasıl Kullanılır?</h3><p>Harfleri üstteki kutuya yaz. Joker için <strong>x</strong> kullan.<br><br><strong>Başında/İçinde/Sonunda</strong> filtreleri eldeki harflere ek çalışır. Örneğin elimde "mtlkaie" ve başında "deli" varsa DELİK, DELİL gibi kelimeleri bulur.</p></div></div><div class="hint-btn"><button class="hint-action" onclick="showExample()">Örneği Göster ↗</button></div></div>`;
+    area.innerHTML = `
+<div class="help-grid">
+  <div class="help-card">
+    <div class="help-icon">🃏</div>
+    <div class="help-body">
+      <h3>Joker Harf — x</h3>
+      <p>Bilinmeyen bir harf yerine <strong>x</strong> yaz. Örneğin elimde <strong>K, A, L, E, X</strong> varsa; jokerle <span class="wild-letter">M</span> harfini karşılayarak KALEM, <span class="wild-letter">F</span> harfini karşılayarak KEFAL gibi kelimeler de listelenir. Jokerle kullanılan harf altın renkle gösterilir ve o harf için puan verilmez.</p>
+    </div>
+  </div>
+  <div class="help-card">
+    <div class="help-icon">⬅️</div>
+    <div class="help-body">
+      <h3>Başında Filtresi</h3>
+      <p>Elimde <strong>I, R, T</strong> harfleri var; Başında kutusuna <strong>KA</strong> yazıldı. KA harfleri havuza otomatik eklenir, yani elimde K, A, I, R, T varmış gibi çalışır ve sadece <strong>KA</strong> ile başlayan kelimeler listelenir: KATI, KATIR gibi.</p>
+    </div>
+  </div>
+  <div class="help-card">
+    <div class="help-icon">🔍</div>
+    <div class="help-body">
+      <h3>İçinde Filtresi</h3>
+      <p>Elimde <strong>T, U, N</strong> harfleri var; İçinde kutusuna <strong>RA</strong> yazıldı. RA harfleri havuza eklenir ve içinde <strong>RA</strong> geçen kelimeler aranır: TURAN, RAUNT, TURA, URAN, RANT gibi.</p>
+    </div>
+  </div>
+  <div class="help-card">
+    <div class="help-icon">➡️</div>
+    <div class="help-body">
+      <h3>Sonunda Filtresi</h3>
+      <p>Elimde <strong>M, R, U, K, A</strong> harfleri var; Sonunda kutusuna <strong>AL</strong> yazıldı. AL harfleri havuza eklenir ve <strong>AL</strong> ile biten kelimeler listelenir: KUMRAL, KURAL, MARAL gibi. Birden fazla filtreyi aynı anda kullanabilirsin.</p>
+    </div>
+  </div>
+</div>
+<div class="hint-btn"><button class="hint-action" onclick="showExample()">Örneği Göster ↗</button></div>`;
   } else {
     area.innerHTML = `<div class="empty"><div class="empty-icon">🔍</div><div class="empty-title">${title}</div><div class="empty-sub">${sub}</div></div>`;
   }
