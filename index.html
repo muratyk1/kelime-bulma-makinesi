@@ -12,106 +12,166 @@
 <title>Kelime Bulma Makinesi</title>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  /* ========== THEMES ========== */
   :root {
-    --bg: #0a1628; --bg2: #0d1e38; --bg3: #112244; --bg4: #1a3060;
-    --text: #e8f0fe; --text2: #a8c0e8cc; --text3: #6890c880;
-    --accent: #4da6ff; --red: #ff453a; --border: #1e3a6e;
-    --border-light: #2a4f8a55; --radius: 14px; --radius-sm: 10px;
+    --bg:#0a1628; --bg2:#0d1e38; --bg3:#112244; --bg4:#1a3060;
+    --text:#e8f0fe; --text2:rgba(168,192,232,.8); --text3:rgba(104,144,200,.5);
+    --accent:#4da6ff; --red:#ff453a;
+    --border:#1e3a6e; --border-light:rgba(42,79,138,.33);
+    --radius:14px; --radius-sm:10px;
   }
-  html, body { height: 100%; background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif; overscroll-behavior: none; }
-  body { display: flex; flex-direction: column; }
+  body[data-theme="siyah"] {
+    --bg:#000; --bg2:#0d0d0d; --bg3:#1a1a1a; --bg4:#262626;
+    --text:#fff; --text2:rgba(255,255,255,.75); --text3:rgba(255,255,255,.4);
+    --accent:#4da6ff; --red:#ff453a; --border:#333; --border-light:rgba(255,255,255,.1);
+  }
+  body[data-theme="zumrut"] {
+    --bg:#051a10; --bg2:#0a2518; --bg3:#0f3020; --bg4:#1a4a30;
+    --text:#e0f8ec; --text2:rgba(180,240,200,.8); --text3:rgba(100,200,140,.5);
+    --accent:#2ecc71; --red:#ff6b6b; --border:#1a5a30; --border-light:rgba(46,204,113,.2);
+  }
+  body[data-theme="mor"] {
+    --bg:#0f0520; --bg2:#160830; --bg3:#1e0d40; --bg4:#2d1860;
+    --text:#f0e6ff; --text2:rgba(210,170,255,.8); --text3:rgba(150,100,220,.5);
+    --accent:#a855f7; --red:#ff453a; --border:#3d1a80; --border-light:rgba(168,85,247,.2);
+  }
+  body[data-theme="gunduz"] {
+    --bg:#f0f4f8; --bg2:#fff; --bg3:#e8eef5; --bg4:#d0dae8;
+    --text:#1a2a3a; --text2:rgba(40,60,80,.75); --text3:rgba(60,90,120,.5);
+    --accent:#2563eb; --red:#dc2626; --border:#c0cfe0; --border-light:rgba(37,99,235,.15);
+  }
+
+  html, body { height:100%; background:var(--bg); color:var(--text); font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif; overscroll-behavior:none; }
+  body { display:flex; flex-direction:column; }
 
   /* NAV */
-  .nav { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px 8px; border-bottom: 0.5px solid var(--border); background: var(--bg2); position: sticky; top: 0; z-index: 100; }
-  .nav-title { font-size: 17px; font-weight: 600; letter-spacing: -0.3px; color: var(--text); }
-  .nav-btn { width: 36px; height: 36px; border-radius: 50%; background: var(--bg4); border: 0.5px solid var(--border-light); color: var(--text); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 18px; }
+  .nav { display:flex; align-items:center; justify-content:space-between; padding:12px 16px 8px; border-bottom:0.5px solid var(--border); background:var(--bg2); position:sticky; top:0; z-index:100; }
+  .nav-title { font-size:17px; font-weight:600; letter-spacing:-0.3px; color:var(--text); }
+  .nav-btn { width:36px; height:36px; border-radius:50%; background:var(--bg4); border:0.5px solid var(--border-light); color:var(--text); display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:18px; }
 
   /* SCROLL */
-  .scroll { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 16px; padding-bottom: 40px; }
+  .scroll { flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; padding:16px; padding-bottom:40px; }
 
   /* INPUTS */
-  .input-group { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
-  .field { width: 100%; background: var(--bg3); border: 1px solid var(--border-light); border-radius: var(--radius-sm); padding: 14px; font-size: 17px; color: var(--text); letter-spacing: 1.5px; text-transform: uppercase; outline: none; -webkit-appearance: none; }
-  .field:focus { border-color: var(--accent); box-shadow: 0 0 0 2px #4da6ff22; }
-  .field::placeholder { color: var(--text3); letter-spacing: 0; text-transform: none; font-size: 16px; }
-  .field-small { font-size: 15px; padding: 12px 14px; }
-  .filter-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+  .input-group { display:flex; flex-direction:column; gap:10px; margin-bottom:16px; }
+  .field { width:100%; background:var(--bg3); border:1px solid var(--border-light); border-radius:var(--radius-sm); padding:14px; font-size:17px; color:var(--text); letter-spacing:1.5px; text-transform:uppercase; outline:none; -webkit-appearance:none; }
+  .field:focus { border-color:var(--accent); box-shadow:0 0 0 2px color-mix(in srgb, var(--accent) 13%, transparent); }
+  .field::placeholder { color:var(--text3); letter-spacing:0; text-transform:none; font-size:16px; }
+  .field-small { font-size:15px; padding:12px 14px; }
+  .filter-row { display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; }
 
   /* BUTTONS */
-  .btn-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
-  .btn { width: 100%; height: 50px; border-radius: var(--radius); border: none; font-size: 16px; font-weight: 600; cursor: pointer; transition: opacity 0.15s, transform 0.1s; }
-  .btn:active { opacity: 0.8; transform: scale(0.97); }
-  .btn-primary { background: var(--accent); color: #fff; }
-  .btn-danger  { background: var(--red);    color: #fff; }
+  .btn-row { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:20px; }
+  .btn { width:100%; height:50px; border-radius:var(--radius); border:none; font-size:16px; font-weight:600; cursor:pointer; transition:opacity .15s,transform .1s; }
+  .btn:active { opacity:.8; transform:scale(.97); }
+  .btn-primary { background:var(--accent); color:#fff; }
+  .btn-danger  { background:var(--red);    color:#fff; }
 
   /* LEN PILLS */
-  .len-filters { display: flex; gap: 6px; overflow-x: auto; margin-bottom: 16px; padding-bottom: 2px; scrollbar-width: none; }
-  .len-filters::-webkit-scrollbar { display: none; }
-  .len-pill { flex-shrink: 0; padding: 7px 14px; border-radius: 20px; border: 1px solid var(--border-light); background: var(--bg3); color: var(--text2); font-size: 13px; font-weight: 500; cursor: pointer; white-space: nowrap; transition: all 0.15s; }
-  .len-pill.active { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600; }
+  .len-filters { display:flex; gap:6px; overflow-x:auto; margin-bottom:16px; padding-bottom:2px; scrollbar-width:none; }
+  .len-filters::-webkit-scrollbar { display:none; }
+  .len-pill { flex-shrink:0; padding:7px 14px; border-radius:20px; border:1px solid var(--border-light); background:var(--bg3); color:var(--text2); font-size:13px; font-weight:500; cursor:pointer; white-space:nowrap; transition:all .15s; }
+  .len-pill.active { background:var(--accent); border-color:var(--accent); color:#fff; font-weight:600; }
 
-  /* SECTION */
-  .section-anchor { display: block; height: 0; }
-  .section-header { font-size: 11px; font-weight: 600; color: var(--text2); letter-spacing: 0.8px; text-transform: uppercase; }
-  .section-header-row { display: flex; align-items: center; justify-content: space-between; padding: 16px 0 8px; }
-  .back-to-top-btn { background: var(--bg4); color: var(--accent); border: 1px solid var(--border-light); padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 500; cursor: pointer; white-space: nowrap; }
-  .wild-letter { color: #ffd700; font-style: italic; font-weight: 700; }
+  /* SECTION HEADERS */
+  .section-anchor { display:block; height:0; }
+  .section-header-row { display:flex; align-items:center; justify-content:space-between; padding:16px 0 8px; }
+  .section-header { font-size:11px; font-weight:600; color:var(--text2); letter-spacing:.8px; text-transform:uppercase; }
+  .back-to-top-btn { background:none; border:none; color:var(--text3); font-size:12px; cursor:pointer; padding:4px 0; }
+  .back-to-top-btn:active { color:var(--accent); }
 
   /* WORD LIST */
-  .word-list { display: flex; flex-direction: column; }
-  .word-item { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 0.5px solid var(--border); cursor: pointer; }
-  .word-item:last-child { border-bottom: none; }
-  .word-item:active { background: var(--bg3); margin: 0 -16px; padding: 10px 16px; }
-  .word-star { font-size: 16px; flex-shrink: 0; }
-  .word-text { font-size: 15px; font-weight: 500; letter-spacing: 0.3px; flex: 1; color: var(--text); }
-  .word-score { background: var(--red); color: #fff; font-size: 12px; font-weight: 700; padding: 3px 9px; border-radius: 20px; min-width: 32px; text-align: center; }
+  .word-list { display:flex; flex-direction:column; }
+  .word-item { display:flex; align-items:center; gap:10px; padding:10px 0; border-bottom:0.5px solid var(--border); cursor:pointer; }
+  .word-item:last-child { border-bottom:none; }
+  .word-item:active { background:var(--bg3); margin:0 -16px; padding:10px 16px; }
 
-  /* EMPTY / HINT */
-  .empty { text-align: center; padding: 48px 16px; color: var(--text2); }
-  .empty-icon { font-size: 48px; margin-bottom: 12px; }
-  .empty-title { font-size: 18px; font-weight: 600; margin-bottom: 6px; }
-  .empty-sub { font-size: 14px; color: var(--text3); }
-  .hint-card { background: var(--bg3); border-radius: var(--radius); padding: 16px; margin-bottom: 12px; border: 1px solid var(--border-light); }
-  .hint-row { display: flex; align-items: flex-start; gap: 12px; }
-  .hint-icon { font-size: 28px; flex-shrink: 0; }
-  .hint-content h3 { font-size: 15px; font-weight: 600; margin-bottom: 4px; color: var(--text); }
-  .hint-content p { font-size: 13px; color: var(--text2); line-height: 1.5; }
-  .hint-btn { display: flex; justify-content: flex-end; margin-top: 10px; }
-  .hint-action { background: var(--bg4); color: var(--accent); border: 1px solid var(--border-light); padding: 7px 16px; border-radius: 20px; font-size: 13px; font-weight: 500; cursor: pointer; }
+  .word-marker { font-size:14px; flex-shrink:0; color:var(--text3); line-height:1; }
+  .word-text { font-size:15px; font-weight:500; letter-spacing:.3px; flex:1; color:var(--text); }
+  .word-score { background:var(--red); color:#fff; font-size:12px; font-weight:700; padding:3px 9px; border-radius:20px; min-width:32px; text-align:center; }
+
+  /* TOP WORD (overall best) */
+  .word-item.word-top .word-text   { color:#ffd700; font-weight:700; }
+  .word-item.word-top .word-score  { background:#b8860b; }
+  .word-item.word-top .word-marker { color:#ffd700; }
+
+  /* CHAMPION (first in each group) */
+  .word-item.word-champion .word-text   { color:var(--accent); font-weight:600; }
+  .word-item.word-champion .word-marker { color:var(--accent); }
+
+  /* WILDCARD LETTER */
+  .wild-letter { color:#ffd700; font-style:italic; font-weight:700; }
+
+  /* EMPTY / HINT CARDS */
+  .empty { text-align:center; padding:48px 16px; color:var(--text2); }
+  .empty-icon { font-size:48px; margin-bottom:12px; }
+  .empty-title { font-size:18px; font-weight:600; margin-bottom:6px; }
+  .empty-sub { font-size:14px; color:var(--text3); }
+  .hint-card { background:var(--bg3); border-radius:var(--radius); padding:16px; margin-bottom:12px; border:1px solid var(--border-light); }
+  .hint-row { display:flex; align-items:flex-start; gap:12px; }
+  .hint-icon { font-size:28px; flex-shrink:0; }
+  .hint-content h3 { font-size:15px; font-weight:600; margin-bottom:4px; color:var(--text); }
+  .hint-content p { font-size:13px; color:var(--text2); line-height:1.6; }
 
   /* MODAL */
-  .modal-overlay { position: fixed; inset: 0; background: rgba(5,10,25,0.85); z-index: 999; display: flex; align-items: flex-end; opacity: 0; pointer-events: none; transition: opacity 0.25s; }
-  .modal-overlay.open { opacity: 1; pointer-events: all; }
-  .modal { background: var(--bg2); border-radius: 20px 20px 0 0; border-top: 1px solid var(--border-light); padding: 12px 20px 40px; width: 100%; transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.32,0.72,0,1); }
-  .modal-overlay.open .modal { transform: translateY(0); }
-  .modal-handle { width: 36px; height: 4px; background: var(--border); border-radius: 2px; margin: 0 auto 16px; }
-  .modal-word { font-size: 28px; font-weight: 700; letter-spacing: 1px; margin-bottom: 4px; color: var(--text); }
-  .modal-meta { font-size: 14px; color: var(--text2); margin-bottom: 16px; }
-  .modal-score-badge { display: inline-flex; align-items: center; gap: 6px; background: var(--red); color: #fff; padding: 5px 12px; border-radius: 20px; font-size: 14px; font-weight: 600; margin-bottom: 20px; }
-  .modal-section-title { font-size: 12px; font-weight: 600; color: var(--text2); letter-spacing: 0.8px; text-transform: uppercase; margin-bottom: 8px; }
-  .modal-meaning { font-size: 15px; color: var(--text); line-height: 1.6; background: var(--bg3); border: 1px solid var(--border-light); padding: 14px; border-radius: var(--radius-sm); min-height: 80px; }
-  .modal-close { width: 100%; background: var(--bg4); color: var(--text); border: 1px solid var(--border-light); height: 50px; border-radius: var(--radius); font-size: 16px; font-weight: 500; margin-top: 16px; cursor: pointer; }
-  .loading-dots::after { content: ''; animation: dots 1.5s infinite; }
-  @keyframes dots { 0%{content:'.'} 33%{content:'..'} 66%{content:'...'} }
+  .modal-overlay { position:fixed; inset:0; background:rgba(5,10,25,.85); z-index:999; display:flex; align-items:flex-end; opacity:0; pointer-events:none; transition:opacity .25s; }
+  .modal-overlay.open { opacity:1; pointer-events:all; }
+  .modal { background:var(--bg2); border-radius:20px 20px 0 0; border-top:1px solid var(--border-light); padding:12px 20px 40px; width:100%; transform:translateY(100%); transition:transform .3s cubic-bezier(.32,.72,0,1); }
+  .modal-overlay.open .modal { transform:translateY(0); }
+  .modal-handle { width:36px; height:4px; background:var(--border); border-radius:2px; margin:0 auto 16px; }
+  .modal-word { font-size:28px; font-weight:700; letter-spacing:1px; margin-bottom:4px; color:var(--text); }
+  .modal-meta { font-size:14px; color:var(--text2); margin-bottom:16px; }
+  .modal-score-badge { display:inline-flex; align-items:center; gap:6px; background:var(--red); color:#fff; padding:5px 12px; border-radius:20px; font-size:14px; font-weight:600; margin-bottom:20px; }
+  .modal-section-title { font-size:12px; font-weight:600; color:var(--text2); letter-spacing:.8px; text-transform:uppercase; margin-bottom:8px; }
+  .modal-meaning { font-size:15px; color:var(--text); line-height:1.6; background:var(--bg3); border:1px solid var(--border-light); padding:14px; border-radius:var(--radius-sm); min-height:80px; }
+  .modal-close { width:100%; background:var(--bg4); color:var(--text); border:1px solid var(--border-light); height:50px; border-radius:var(--radius); font-size:16px; font-weight:500; margin-top:16px; cursor:pointer; }
+  .loading-dots::after { content:"."; animation:dots 1.5s infinite; }
+  @keyframes dots { 0%{content:"."} 33%{content:".."} 66%{content:"..."} }
 
   /* SETTINGS */
-  .settings-overlay { position: fixed; inset: 0; background: var(--bg); z-index: 998; transform: translateX(100%); transition: transform 0.3s cubic-bezier(0.32,0.72,0,1); overflow-y: auto; }
-  .settings-overlay.open { transform: translateX(0); }
-  .settings-nav { display: flex; align-items: center; gap: 8px; padding: 12px 16px; border-bottom: 0.5px solid var(--border); position: sticky; top: 0; background: var(--bg2); }
-  .settings-back { background: none; border: none; color: var(--accent); font-size: 16px; cursor: pointer; padding: 4px 0; }
-  .settings-body { padding: 24px 16px; }
-  .settings-group { background: var(--bg3); border-radius: var(--radius); border: 1px solid var(--border-light); margin-bottom: 20px; overflow: hidden; }
-  .settings-row { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; border-bottom: 0.5px solid var(--border); }
-  .settings-row:last-child { border-bottom: none; }
-  .settings-label { font-size: 16px; color: var(--text); }
-  .settings-value { font-size: 15px; color: var(--text2); }
-  .settings-note { font-size: 13px; color: var(--text3); margin-bottom: 6px; padding: 0 4px; }
-  .help-grid { display: flex; flex-direction: column; gap: 10px; margin-bottom: 12px; }
-  .help-card { background: var(--bg3); border-radius: var(--radius); padding: 14px 16px; border: 1px solid var(--border-light); display: flex; gap: 12px; align-items: flex-start; }
-  .help-icon { font-size: 22px; flex-shrink: 0; padding-top: 1px; }
-  .help-body h3 { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 5px; }
-  .help-body p { font-size: 13px; color: var(--text2); line-height: 1.55; }
-  .help-body strong { color: var(--text); }
+  .settings-overlay { position:fixed; inset:0; background:var(--bg); z-index:998; transform:translateX(100%); transition:transform .3s cubic-bezier(.32,.72,0,1); overflow-y:auto; }
+  .settings-overlay.open { transform:translateX(0); }
+  .settings-nav { display:flex; align-items:center; gap:8px; padding:12px 16px; border-bottom:0.5px solid var(--border); position:sticky; top:0; background:var(--bg2); z-index:1; }
+  .settings-back { background:none; border:none; color:var(--accent); font-size:16px; cursor:pointer; padding:4px 0; }
+  .settings-body { padding:24px 16px; }
+  .settings-group { background:var(--bg3); border-radius:var(--radius); border:1px solid var(--border-light); margin-bottom:20px; overflow:hidden; }
+  .settings-row { display:flex; align-items:center; justify-content:space-between; padding:14px 16px; border-bottom:0.5px solid var(--border); }
+  .settings-row:last-child { border-bottom:none; }
+  .settings-label { font-size:16px; color:var(--text); }
+  .settings-value { font-size:15px; color:var(--text2); }
+  .settings-note { font-size:13px; color:var(--text3); margin-bottom:6px; padding:0 4px; }
+  .settings-link { background:none; border:none; color:var(--accent); font-size:15px; cursor:pointer; padding:0; }
+
+  /* TOGGLE */
+  .toggle { position:relative; width:51px; height:31px; flex-shrink:0; }
+  .toggle input { opacity:0; width:0; height:0; position:absolute; }
+  .toggle-track { position:absolute; inset:0; background:var(--border); border-radius:31px; transition:background .2s; cursor:pointer; }
+  .toggle input:checked + .toggle-track { background:var(--accent); }
+  .toggle-thumb { position:absolute; top:2px; left:2px; width:27px; height:27px; background:#fff; border-radius:50%; transition:transform .2s; pointer-events:none; box-shadow:0 1px 3px rgba(0,0,0,.3); }
+  .toggle input:checked ~ .toggle-thumb { transform:translateX(20px); }
+
+  /* THEMES */
+  .theme-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:8px; padding:14px 16px; }
+  .theme-btn { display:flex; flex-direction:column; align-items:center; gap:6px; background:none; border:2px solid transparent; border-radius:12px; padding:8px 4px; cursor:pointer; transition:border-color .15s; }
+  .theme-btn.active { border-color:var(--accent); }
+  .theme-swatch { width:36px; height:36px; border-radius:50%; border:2px solid rgba(255,255,255,.15); }
+  .theme-label { font-size:11px; color:var(--text2); font-weight:500; }
+  .theme-btn.active .theme-label { color:var(--accent); font-weight:700; }
+
+  /* CONTACT */
+  .contact-textarea { width:100%; background:var(--bg); border:1px solid var(--border-light); border-radius:var(--radius-sm); padding:12px; font-size:14px; color:var(--text); resize:none; outline:none; font-family:inherit; }
+  .contact-textarea:focus { border-color:var(--accent); }
+  .contact-send { width:100%; height:44px; border-radius:var(--radius-sm); border:none; background:var(--accent); color:#fff; font-size:15px; font-weight:600; cursor:pointer; margin-top:10px; }
+
+  /* LEGAL OVERLAYS */
+  .legal-overlay { position:fixed; inset:0; background:var(--bg); z-index:1001; transform:translateX(100%); transition:transform .3s cubic-bezier(.32,.72,0,1); overflow-y:auto; }
+  .legal-overlay.open { transform:translateX(0); }
+  .legal-nav { display:flex; align-items:center; gap:8px; padding:12px 16px; border-bottom:0.5px solid var(--border); position:sticky; top:0; background:var(--bg2); }
+  .legal-body { padding:24px 16px; font-size:14px; color:var(--text2); line-height:1.8; }
+  .legal-body h2 { font-size:18px; font-weight:700; color:var(--text); margin:20px 0 10px; }
+  .legal-body h2:first-child { margin-top:0; }
+  .legal-body p { margin-bottom:12px; }
 </style>
 </head>
 <body>
@@ -123,7 +183,7 @@
   <button class="nav-btn" onclick="openSettings()" aria-label="Ayarlar">⚙️</button>
 </div>
 
-<!-- SCROLL -->
+<!-- MAIN SCROLL -->
 <div class="scroll" id="mainScroll">
   <div class="input-group">
     <input id="lettersInput" class="field" type="text" placeholder="Harfler (Joker: x)" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false" oninput="syncLetters()" onkeydown="if(event.key==='Enter')findWords()">
@@ -144,8 +204,8 @@
 <div class="modal-overlay" id="modalOverlay" onclick="if(event.target===this)closeModal()">
   <div class="modal">
     <div class="modal-handle"></div>
-    <div class="modal-word" id="modalWord"></div>
-    <div class="modal-meta" id="modalMeta"></div>
+    <div class="modal-word"  id="modalWord"></div>
+    <div class="modal-meta"  id="modalMeta"></div>
     <div class="modal-score-badge" id="modalScore"></div>
     <div class="modal-section-title">ANLAMI</div>
     <div class="modal-meaning" id="modalMeaning"></div>
@@ -153,13 +213,14 @@
   </div>
 </div>
 
-<!-- SETTINGS -->
+<!-- SETTINGS OVERLAY -->
 <div class="settings-overlay" id="settingsOverlay">
   <div class="settings-nav">
     <button class="settings-back" onclick="closeSettings()">← Geri</button>
     <span style="font-size:17px;font-weight:600;margin-left:8px;color:var(--text)">Ayarlar</span>
   </div>
   <div class="settings-body">
+
     <p class="settings-note">Sözlük</p>
     <div class="settings-group">
       <div class="settings-row">
@@ -168,42 +229,138 @@
       </div>
       <div class="settings-row">
         <span class="settings-label">📚 Kelime Sayısı</span>
-        <span class="settings-value" id="wordCountSetting">–</span>
+        <span class="settings-value" id="wordCountSetting">yükleniyor…</span>
       </div>
     </div>
-    <p class="settings-note">Nasıl kullanılır?</p>
-    <div class="settings-group">
-      <div class="settings-row" style="flex-direction:column;align-items:flex-start;gap:6px">
-        <span class="settings-label" style="font-size:14px;line-height:1.6;color:var(--text2)">Harfleri gir → Kelimeleri Bul'a bas.<br>Joker için <strong style="color:var(--text)">x</strong> kullan.<br>Başında/İçinde/Sonunda filtreleri elden gelen harflere eklenerek çalışır.</span>
-      </div>
-    </div>
-    <p class="settings-note">PWA Kurulum</p>
+
+    <p class="settings-note">Görünüm</p>
     <div class="settings-group">
       <div class="settings-row">
-        <span class="settings-label" style="font-size:14px;color:var(--text2)">Safari → Paylaş ⬆️ → Ana Ekrana Ekle</span>
+        <span class="settings-label">📖 Açıklamaları Göster</span>
+        <label class="toggle">
+          <input type="checkbox" id="showHelpToggle" onchange="toggleHelp(this.checked)" checked>
+          <div class="toggle-track"></div>
+          <div class="toggle-thumb"></div>
+        </label>
+      </div>
+      <div style="padding:4px 0 4px;">
+        <div class="theme-grid">
+          <button class="theme-btn" data-theme="gece" onclick="setTheme('gece')">
+            <div class="theme-swatch" style="background:linear-gradient(135deg,#0a1628,#1a3060)"></div>
+            <span class="theme-label">Gece</span>
+          </button>
+          <button class="theme-btn" data-theme="siyah" onclick="setTheme('siyah')">
+            <div class="theme-swatch" style="background:linear-gradient(135deg,#000,#262626)"></div>
+            <span class="theme-label">Siyah</span>
+          </button>
+          <button class="theme-btn" data-theme="zumrut" onclick="setTheme('zumrut')">
+            <div class="theme-swatch" style="background:linear-gradient(135deg,#051a10,#1a4a30)"></div>
+            <span class="theme-label">Zümrüt</span>
+          </button>
+          <button class="theme-btn" data-theme="mor" onclick="setTheme('mor')">
+            <div class="theme-swatch" style="background:linear-gradient(135deg,#0f0520,#2d1860)"></div>
+            <span class="theme-label">Mor</span>
+          </button>
+          <button class="theme-btn" data-theme="gunduz" onclick="setTheme('gunduz')">
+            <div class="theme-swatch" style="background:linear-gradient(135deg,#f0f4f8,#d0dae8)"></div>
+            <span class="theme-label">Gündüz</span>
+          </button>
+        </div>
       </div>
     </div>
+
+    <p class="settings-note">İletişim</p>
+    <div class="settings-group">
+      <div class="settings-row" style="flex-direction:column;align-items:flex-start;gap:10px">
+        <span class="settings-label" style="font-size:14px">Görüş, öneri veya hata bildirimi için:</span>
+        <textarea id="contactMsg" class="contact-textarea" rows="3" placeholder="Mesajınızı buraya yazın…"></textarea>
+        <button class="contact-send" onclick="sendContact()">✉️ Gönder</button>
+      </div>
+    </div>
+
+    <p class="settings-note">Hakkında</p>
+    <div class="settings-group">
+      <div class="settings-row">
+        <button class="settings-link" onclick="openPrivacy()">Gizlilik Politikası</button>
+        <span style="color:var(--text3);font-size:14px">›</span>
+      </div>
+      <div class="settings-row">
+        <button class="settings-link" onclick="openTerms()">Kullanım Koşulları</button>
+        <span style="color:var(--text3);font-size:14px">›</span>
+      </div>
+      <div class="settings-row">
+        <span class="settings-label" style="font-size:14px;color:var(--text2)">Versiyon</span>
+        <span class="settings-value">1.0</span>
+      </div>
+    </div>
+
   </div>
 </div>
 
+<!-- PRIVACY POLICY OVERLAY -->
+<div class="legal-overlay" id="privacyOverlay">
+  <div class="legal-nav">
+    <button class="settings-back" onclick="closePrivacy()">← Geri</button>
+    <span style="font-size:17px;font-weight:600;margin-left:8px;color:var(--text)">Gizlilik Politikası</span>
+  </div>
+  <div class="legal-body">
+    <h2>Veri Toplama</h2>
+    <p>Kelime Bulma Makinesi uygulaması herhangi bir kişisel veri toplamaz. Girdiğiniz harfler ve tercihleriniz yalnızca cihazınızda saklanır; hiçbir sunucuya gönderilmez.</p>
+    <h2>Yerel Depolama</h2>
+    <p>Uygulama, tema tercihinizi ve açıklama gösterme ayarınızı hatırlamak için yalnızca tarayıcının yerel depolamasını (localStorage) kullanır. Bu veriler cihazınızda kalır ve üçüncü taraflarla paylaşılmaz.</p>
+    <h2>Kelime Anlamları</h2>
+    <p>Kelimelerin anlamları, bir kelimeye dokunulduğunda TDK'nın herkese açık API'si üzerinden anlık olarak çekilir. Bu istek yalnızca kelimeyi içerir; kullanıcıya ait hiçbir bilgi iletilmez.</p>
+    <h2>İletişim</h2>
+    <p>Ayarlar bölümündeki iletişim formu aracılığıyla gönderilen mesajlar doğrudan e-posta uygulamanıza yönlendirilir. Bu mesajlar uygulama tarafından saklanmaz veya işlenmez.</p>
+    <h2>Değişiklikler</h2>
+    <p>Bu politika gerektiğinde güncellenebilir. Önemli değişiklikler uygulama içinde duyurulur.</p>
+    <p style="color:var(--text3);font-size:13px">Son güncelleme: Mayıs 2025</p>
+  </div>
+</div>
+
+<!-- TERMS OF USE OVERLAY -->
+<div class="legal-overlay" id="termsOverlay">
+  <div class="legal-nav">
+    <button class="settings-back" onclick="closeTerms()">← Geri</button>
+    <span style="font-size:17px;font-weight:600;margin-left:8px;color:var(--text)">Kullanım Koşulları</span>
+  </div>
+  <div class="legal-body">
+    <h2>Kabul</h2>
+    <p>Bu uygulamayı kullanarak aşağıdaki koşulları kabul etmiş sayılırsınız.</p>
+    <h2>Kullanım Amacı</h2>
+    <p>Kelime Bulma Makinesi, Türkçe kelime oyunlarında (Scrabble, Kelime Avı vb.) yardımcı olmak amacıyla tasarlanmış kişisel kullanıma yönelik bir araçtır. Ticari amaçla kullanılamaz.</p>
+    <h2>Sözlük İçeriği</h2>
+    <p>Uygulama TDK Güncel Türkçe Sözlük verilerinden yararlanmaktadır. Tüm kelime hakları TDK'ya aittir. Sözlükte bulunmayan veya yanlış sonuçlar için sorumluluk kabul edilmez.</p>
+    <h2>Hizmet Değişiklikleri</h2>
+    <p>Uygulama önceden haber verilmeksizin güncellenebilir, değiştirilebilir veya kaldırılabilir.</p>
+    <h2>Sorumluluk Sınırı</h2>
+    <p>Uygulama "olduğu gibi" sunulmaktadır. Kullanımdan doğabilecek sonuçlar kullanıcının sorumluluğundadır.</p>
+    <h2>İletişim</h2>
+    <p>Koşullarla ilgili sorularınız için Ayarlar → İletişim bölümünü kullanabilirsiniz.</p>
+    <p style="color:var(--text3);font-size:13px">Son güncelleme: Mayıs 2025</p>
+  </div>
+</div>
 
 <script>
 let TURKISH_WORDS = [];
 
 async function loadWords() {
   try {
-    const res = await fetch('./Turkce%20Kelime%20Listesi.txt');
+    const res = await fetch('./kelimeler.txt');
     const text = await res.text();
     TURKISH_WORDS = text.trim().split('\n').map(w => w.trim()).filter(Boolean);
-  } catch(e) {
-    console.error('Kelime listesi yüklenemedi:', e);
-  }
+  } catch(e) { console.error('Kelime listesi yüklenemedi:', e); }
 }
 
 const SC = {A:1,B:3,C:4,Ç:4,D:3,E:1,F:7,G:5,Ğ:8,H:5,I:2,İ:1,J:10,K:1,L:1,M:2,N:1,O:2,Ö:7,P:5,R:1,S:2,Ş:4,T:1,U:2,Ü:3,V:7,Y:3,Z:4};
 
-function scoreWord(w, wilds=[]) { return w.split('').reduce((s,c,i) => s + (wilds.includes(i) ? 0 : (SC[c]||0)), 0); }
-function normalize(s) { return s.replace(/i/g,'İ').replace(/ı/g,'I').toUpperCase().replace(/\s/g,''); }
+function scoreWord(w, wilds=[]) {
+  return w.split('').reduce((s,c,i) => s + (wilds.includes(i) ? 0 : (SC[c]||0)), 0);
+}
+
+function normalize(s) {
+  return s.replace(/i/g,'İ').replace(/ı/g,'I').toUpperCase().replace(/\s/g,'');
+}
 
 function canMake(word, pool) {
   const p = [...pool];
@@ -234,7 +391,10 @@ function findWords() {
   const ct  = normalize(document.getElementById('contains').value);
   const ew  = normalize(document.getElementById('endsWith').value);
 
-  if (!raw) { showEmpty('Harfleri gir', "Üstteki kutuya harflerini yaz ve Kelimeleri Bul'a bas"); return; }
+  if (!raw) {
+    showEmpty('Harfleri gir', "Üstteki kutuya harflerini yaz ve Kelimeleri Bul\'a bas");
+    return;
+  }
 
   const fullPool = [
     ...raw.split(''),
@@ -253,17 +413,25 @@ function findWords() {
     const wilds = canMake(word, fullPool);
     if (wilds !== null) { seen.add(word); matched.push({word, wilds}); }
   });
-  matched.sort((a,b) => b.word.length !== a.word.length ? b.word.length - a.word.length : scoreWord(b.word,b.wilds) - scoreWord(a.word,a.wilds));
+
+  matched.sort((a,b) =>
+    b.word.length !== a.word.length
+      ? b.word.length - a.word.length
+      : scoreWord(b.word,b.wilds) - scoreWord(a.word,a.wilds)
+  );
   currentResults = matched;
   renderResults(matched);
 }
 
 function renderResults(list) {
   const area = document.getElementById('resultsArea');
-  if (!list.length) { showEmpty('Kelime bulunamadı', 'Farklı harf kombinasyonları deneyin veya filtreleri değiştirin'); return; }
+  if (!list.length) {
+    showEmpty('Kelime bulunamadı', 'Farklı harf kombinasyonları deneyin veya filtreleri değiştirin');
+    return;
+  }
 
   const byLen = {};
-  list.forEach(item => { (byLen[item.word.length] = byLen[item.word.length] || []).push(item); });
+  list.forEach(item => { (byLen[item.word.length] = byLen[item.word.length]||[]).push(item); });
   const lens = Object.keys(byLen).map(Number).sort((a,b) => b-a);
   const topLens = lens.slice(0,4);
   const hasOther = lens.length > 4;
@@ -274,13 +442,21 @@ function renderResults(list) {
   if (hasOther) pillsHTML += `<div class="len-pill" onclick="scrollToLen('other',this)">Diğer</div>`;
 
   let sectionsHTML = '';
-  lens.forEach((len,idx) => {
+  lens.forEach((len, idx) => {
     const aid = idx < 4 ? `len-${len}` : (idx === 4 ? 'len-other' : `len-x-${len}`);
-    sectionsHTML += `<div class="section-anchor" id="${aid}"></div><div class="section-header-row"><span class="section-header">${len} HARFLİ KELİMELER</span><button class="back-to-top-btn" onclick="scrollToTop()">↑ Sonuçlara Dön</button></div><div class="word-list">`;
-    byLen[len].forEach((item,i) => {
-      const wordHtml = item.word.split('').map((c,pi) => item.wilds.includes(pi) ? `<span class="wild-letter">${c}</span>` : c).join('');
+    // "Sonuçlara Dön" button only for sections after the first (idx > 0)
+    const backBtn = idx === 0 ? '' : `<button class="back-to-top-btn" onclick="scrollToTop()">↑ Sonuçlara Dön</button>`;
+    sectionsHTML += `<div class="section-anchor" id="${aid}"></div><div class="section-header-row"><span class="section-header">${len} HARFLİ KELİMELER</span>${backBtn}</div><div class="word-list">`;
+    byLen[len].forEach((item, i) => {
+      const wordHtml = item.word.split('').map((c,pi) =>
+        item.wilds.includes(pi) ? `<span class="wild-letter">${c}</span>` : c
+      ).join('');
       const wilds_json = JSON.stringify(item.wilds);
-      sectionsHTML += `<div class="word-item" onclick="openModal('${item.word}',${wilds_json})"><span class="word-star">${i===0?'⭐':'☆'}</span><span class="word-text">${wordHtml}</span><span class="word-score">${scoreWord(item.word,item.wilds)}</span></div>`;
+      const isTop   = (idx === 0 && i === 0);
+      const isChamp = (i === 0);
+      const itemClass = isTop ? 'word-item word-top' : (isChamp ? 'word-item word-champion' : 'word-item');
+      const marker = isChamp ? '◆' : '·';
+      sectionsHTML += `<div class="${itemClass}" onclick="openModal('${item.word}',${wilds_json})"><span class="word-marker">${marker}</span><span class="word-text">${wordHtml}</span><span class="word-score">${scoreWord(item.word,item.wilds)}</span></div>`;
     });
     sectionsHTML += '</div>';
   });
@@ -296,58 +472,73 @@ function scrollToLen(len, pill) {
   const el = document.getElementById(len === 'other' ? 'len-other' : `len-${len}`);
   if (el) {
     const sc = document.getElementById('mainScroll');
-    sc.scrollTo({ top: el.getBoundingClientRect().top + sc.scrollTop - sc.getBoundingClientRect().top - 8, behavior: 'smooth' });
+    sc.scrollTo({ top: el.getBoundingClientRect().top + sc.scrollTop - sc.getBoundingClientRect().top - 8, behavior:'smooth' });
   }
 }
 
 function scrollToTop() {
-  document.getElementById('mainScroll').scrollTo({ top: 0, behavior: 'smooth' });
+  document.getElementById('mainScroll').scrollTo({ top:0, behavior:'smooth' });
 }
 
 function showEmpty(title, sub) {
   const area = document.getElementById('resultsArea');
-  if (!currentResults.length) {
-    area.innerHTML = `
-<div class="help-grid">
-  <div class="help-card">
-    <div class="help-icon">🃏</div>
-    <div class="help-body">
-      <h3>Joker Harf — x</h3>
-      <p>Bilinmeyen bir harf yerine <strong>x</strong> yaz. Örneğin elimde <strong>K, A, L, E, X</strong> varsa; jokerle <span class="wild-letter">M</span> harfini karşılayarak KALEM, <span class="wild-letter">F</span> harfini karşılayarak KEFAL gibi kelimeler de listelenir. Jokerle kullanılan harf altın renkle gösterilir ve o harf için puan verilmez.</p>
-    </div>
-  </div>
-  <div class="help-card">
-    <div class="help-icon">⬅️</div>
-    <div class="help-body">
-      <h3>Başında Filtresi</h3>
-      <p>Elimde <strong>I, R, T</strong> harfleri var; Başında kutusuna <strong>KA</strong> yazıldı. KA harfleri havuza otomatik eklenir, yani elimde K, A, I, R, T varmış gibi çalışır ve sadece <strong>KA</strong> ile başlayan kelimeler listelenir: KATI, KATIR gibi.</p>
-    </div>
-  </div>
-  <div class="help-card">
-    <div class="help-icon">🔍</div>
-    <div class="help-body">
-      <h3>İçinde Filtresi</h3>
-      <p>Elimde <strong>T, U, N</strong> harfleri var; İçinde kutusuna <strong>RA</strong> yazıldı. RA harfleri havuza eklenir ve içinde <strong>RA</strong> geçen kelimeler aranır: TURAN, RAUNT, TURA, URAN, RANT gibi.</p>
-    </div>
-  </div>
-  <div class="help-card">
-    <div class="help-icon">➡️</div>
-    <div class="help-body">
-      <h3>Sonunda Filtresi</h3>
-      <p>Elimde <strong>M, R, U, K, A</strong> harfleri var; Sonunda kutusuna <strong>AL</strong> yazıldı. AL harfleri havuza eklenir ve <strong>AL</strong> ile biten kelimeler listelenir: KUMRAL, KURAL, MARAL gibi. Birden fazla filtreyi aynı anda kullanabilirsin.</p>
-    </div>
-  </div>
-</div>
-<div class="hint-btn"><button class="hint-action" onclick="showExample()">Örneği Göster ↗</button></div>`;
-  } else {
+  if (currentResults.length) {
     area.innerHTML = `<div class="empty"><div class="empty-icon">🔍</div><div class="empty-title">${title}</div><div class="empty-sub">${sub}</div></div>`;
+    return;
   }
-}
 
-function showExample() {
-  document.getElementById('lettersInput').value = 'GYFTRAE';
-  ['startsWith','contains','endsWith'].forEach(id => document.getElementById(id).value = '');
-  findWords();
+  const showHelp = localStorage.getItem('showHelp') !== 'false';
+  if (!showHelp) {
+    area.innerHTML = `<div class="empty"><div class="empty-icon">🔡</div><div class="empty-title">Harfleri Gir</div><div class="empty-sub">Elindeki harfleri yaz ve Kelimeleri Bul\'a bas</div></div>`;
+    return;
+  }
+
+  area.innerHTML = `
+    <div class="hint-card">
+      <div class="hint-row">
+        <div class="hint-icon">📖</div>
+        <div class="hint-content">
+          <h3>Nasıl Kullanılır?</h3>
+          <p>Elindeki harfleri üst kutuya yaz, <strong>Kelimeleri Bul</strong>\'a bas. Joker için <strong>x</strong> kullan. Başında / İçinde / Sonunda filtrelerine yazdıkların, el harflerine eklenerek çalışır.</p>
+        </div>
+      </div>
+    </div>
+    <div class="hint-card">
+      <div class="hint-row">
+        <div class="hint-icon">🃏</div>
+        <div class="hint-content">
+          <h3>Joker Harf — x</h3>
+          <p>Elinde olmayan bir harfin yerine <strong>x</strong> yaz. Örneğin elin <strong>GYFTRAE</strong> ise <strong>GYFTRAEX</strong> yazarsan, x herhangi bir harf yerine geçer. Joker harfler puan sayılmaz ve sonuçlarda <span style="color:#ffd700;font-style:italic;font-weight:700">altın</span> rengiyle gösterilir.</p>
+        </div>
+      </div>
+    </div>
+    <div class="hint-card">
+      <div class="hint-row">
+        <div class="hint-icon">⬅️</div>
+        <div class="hint-content">
+          <h3>Başında Filtresi</h3>
+          <p>Kelimeni belirli harflerle başlatmak istersen "Başında" kutusunu kullan. Bu harfler eline eklenir. Örneğin elin <strong>RLKTAE</strong> ve başında <strong>DE</strong> ise DELİK, DERE, DERT gibi "DE" ile başlayan kelimeler bulunur.</p>
+        </div>
+      </div>
+    </div>
+    <div class="hint-card">
+      <div class="hint-row">
+        <div class="hint-icon">🔍</div>
+        <div class="hint-content">
+          <h3>İçinde Filtresi</h3>
+          <p>Kelimenin belirli harfleri içermesini istersen "İçinde" kutusunu kullan. Bu harfler eline eklenir. Örneğin elin <strong>MNRAE</strong> ve içinde <strong>ER</strong> ise KEMER, NEMER gibi "ER" içeren kelimeler bulunur.</p>
+        </div>
+      </div>
+    </div>
+    <div class="hint-card">
+      <div class="hint-row">
+        <div class="hint-icon">➡️</div>
+        <div class="hint-content">
+          <h3>Sonunda Filtresi</h3>
+          <p>Kelimeni belirli harflerle bitirmek istersen "Sonunda" kutusunu kullan. Bu harfler eline eklenir. Örneğin elin <strong>RSTAE</strong> ve sonunda <strong>AK</strong> ise TARAK, KASNAK gibi "AK" ile biten kelimeler bulunur.</p>
+        </div>
+      </div>
+    </div>`;
 }
 
 function clearAll() {
@@ -372,7 +563,7 @@ async function fetchMeaning(word) {
     const q = word.toLowerCase()
       .replace(/İ/g,'i').replace(/I/g,'ı').replace(/Ğ/g,'ğ')
       .replace(/Ş/g,'ş').replace(/Ü/g,'ü').replace(/Ö/g,'ö').replace(/Ç/g,'ç');
-    const res  = await fetch('https://sozluk.gov.tr/gts?ara=' + encodeURIComponent(q), {signal: AbortSignal.timeout(6000)});
+    const res  = await fetch('https://sozluk.gov.tr/gts?ara=' + encodeURIComponent(q), {signal:AbortSignal.timeout(6000)});
     const data = await res.json();
     if (data?.[0]?.anlamlarListe?.length) {
       document.getElementById('modalMeaning').innerHTML =
@@ -389,8 +580,39 @@ async function fetchMeaning(word) {
 function openSettings()  { document.getElementById('settingsOverlay').classList.add('open'); }
 function closeSettings() { document.getElementById('settingsOverlay').classList.remove('open'); }
 
+function setTheme(name) {
+  document.body.setAttribute('data-theme', name);
+  localStorage.setItem('theme', name);
+  document.querySelectorAll('.theme-btn').forEach(btn =>
+    btn.classList.toggle('active', btn.getAttribute('data-theme') === name)
+  );
+}
+
+function toggleHelp(checked) {
+  localStorage.setItem('showHelp', checked ? 'true' : 'false');
+  if (!currentResults.length) showEmpty('','');
+}
+
+function sendContact() {
+  const msg = document.getElementById('contactMsg').value.trim();
+  if (!msg) return;
+  const subject = encodeURIComponent('Kelime Bulma Makinesi — Geri Bildirim');
+  const body    = encodeURIComponent(msg);
+  window.open('mailto:muratyk@gmail.com?subject=' + subject + '&body=' + body);
+  document.getElementById('contactMsg').value = '';
+}
+
+function openPrivacy()  { document.getElementById('privacyOverlay').classList.add('open'); }
+function closePrivacy() { document.getElementById('privacyOverlay').classList.remove('open'); }
+function openTerms()    { document.getElementById('termsOverlay').classList.add('open'); }
+function closeTerms()   { document.getElementById('termsOverlay').classList.remove('open'); }
+
 document.addEventListener('DOMContentLoaded', async () => {
   await loadWords();
+  const savedTheme = localStorage.getItem('theme') || 'gece';
+  setTheme(savedTheme);
+  const toggle = document.getElementById('showHelpToggle');
+  if (toggle) toggle.checked = localStorage.getItem('showHelp') !== 'false';
   document.getElementById('wordCountSetting').textContent =
     TURKISH_WORDS.length.toLocaleString('tr') + ' kelime';
   ['startsWith','contains','endsWith'].forEach(id => {
