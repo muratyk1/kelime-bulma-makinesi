@@ -427,7 +427,7 @@ function findWords() {
 function renderResults(list) {
   const area = document.getElementById('resultsArea');
   if (!list.length) {
-    showEmpty('Kelime bulunamadı', 'Farklı harf kombinasyonları deneyin veya filtreleri değiştirin');
+    area.innerHTML = '<div class="empty"><div class="empty-icon">🔍</div><div class="empty-title">Kelime bulunamadı</div><div class="empty-sub">Bu harflerle oluşturulabilecek kelime bulunamadı. Farklı harfler deneyin veya joker (x) kullanın.</div></div>';
     return;
   }
 
