@@ -2,8 +2,9 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 <meta name="apple-mobile-web-app-title" content="Kelime Bulma Makinesi">
 <meta name="theme-color" content="#0a1628">
@@ -43,7 +44,7 @@
   }
 
   html, body { height:100%; background:var(--bg); color:var(--text); font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif; overscroll-behavior:none; }
-  body { display:flex; flex-direction:column; }
+  body { display:flex; flex-direction:column; padding-top: env(safe-area-inset-top, 28px); }
 
   /* NAV */
   .nav { display:flex; align-items:center; justify-content:space-between; padding:12px 16px 8px; border-bottom:0.5px solid var(--border); background:var(--bg2); position:sticky; top:0; z-index:100; }
@@ -51,7 +52,7 @@
   .nav-btn { width:36px; height:36px; border-radius:50%; background:var(--bg4); border:0.5px solid var(--border-light); color:var(--text); display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:18px; }
 
   /* SCROLL */
-  .scroll { flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; padding:16px; padding-bottom:40px; }
+  .scroll { flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; padding:16px; padding-bottom:calc(40px + env(safe-area-inset-bottom)); }
 
   /* INPUTS */
   .input-group { display:flex; flex-direction:column; gap:10px; margin-bottom:16px; }
@@ -117,7 +118,7 @@
   /* MODAL */
   .modal-overlay { position:fixed; inset:0; background:rgba(5,10,25,.85); z-index:999; display:flex; align-items:flex-end; opacity:0; pointer-events:none; transition:opacity .25s; }
   .modal-overlay.open { opacity:1; pointer-events:all; }
-  .modal { background:var(--bg2); border-radius:20px 20px 0 0; border-top:1px solid var(--border-light); padding:12px 20px 40px; width:100%; transform:translateY(100%); transition:transform .3s cubic-bezier(.32,.72,0,1); }
+  .modal { background:var(--bg2); border-radius:20px 20px 0 0; border-top:1px solid var(--border-light); padding:12px 20px calc(40px + env(safe-area-inset-bottom)); width:100%; transform:translateY(100%); transition:transform .3s cubic-bezier(.32,.72,0,1); }
   .modal-overlay.open .modal { transform:translateY(0); }
   .modal-handle { width:36px; height:4px; background:var(--border); border-radius:2px; margin:0 auto 16px; }
   .modal-word { font-size:28px; font-weight:700; letter-spacing:1px; margin-bottom:4px; color:var(--text); }
@@ -132,9 +133,9 @@
   /* SETTINGS */
   .settings-overlay { position:fixed; inset:0; background:var(--bg); z-index:998; transform:translateX(100%); transition:transform .3s cubic-bezier(.32,.72,0,1); overflow-y:auto; }
   .settings-overlay.open { transform:translateX(0); }
-  .settings-nav { display:flex; align-items:center; gap:8px; padding:12px 16px; border-bottom:0.5px solid var(--border); position:sticky; top:0; background:var(--bg2); z-index:1; }
+  .settings-nav { display:flex; align-items:center; gap:8px; padding:calc(12px + env(safe-area-inset-top)) 16px 12px; border-bottom:0.5px solid var(--border); position:sticky; top:0; background:var(--bg2); z-index:1; }
   .settings-back { background:none; border:none; color:var(--accent); font-size:16px; cursor:pointer; padding:4px 0; }
-  .settings-body { padding:24px 16px; }
+  .settings-body { padding:24px 16px calc(24px + env(safe-area-inset-bottom)); }
   .settings-group { background:var(--bg3); border-radius:var(--radius); border:1px solid var(--border-light); margin-bottom:20px; overflow:hidden; }
   .settings-row { display:flex; align-items:center; justify-content:space-between; padding:14px 16px; border-bottom:0.5px solid var(--border); }
   .settings-row:last-child { border-bottom:none; }
@@ -382,11 +383,20 @@ let currentResults = [];
 
 function syncLetters() {
   const el = document.getElementById('lettersInput');
-  el.value = normalize(el.value);
+  const clean = normalize(el.value);
+  el.value = clean.split('').join(' ');
+}
+
+function filterToRegex(f, anchor) {
+  if (!f) return null;
+  const pat = f.split('').map(c => c === 'X' ? '.' : c.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('');
+  if (anchor === 'start') return new RegExp('^' + pat);
+  if (anchor === 'end')   return new RegExp(pat + '$');
+  return new RegExp(pat);
 }
 
 function findWords() {
-  const raw = normalize(document.getElementById('lettersInput').value);
+  const raw = normalize(document.getElementById('lettersInput').value).replace(/-/g, '');
   const sw  = normalize(document.getElementById('startsWith').value);
   const ct  = normalize(document.getElementById('contains').value);
   const ew  = normalize(document.getElementById('endsWith').value);
@@ -403,14 +413,19 @@ function findWords() {
     ...ew.split('').filter(Boolean),
   ];
 
+  const swRe = filterToRegex(sw, 'start');
+  const ctRe = filterToRegex(ct, null);
+  const ewRe = filterToRegex(ew, 'end');
+
   const seen = new Set();
   const matched = [];
   TURKISH_WORDS.forEach(word => {
+    if (word === 'STRIP') return;
     if (seen.has(word)) return;
     if (word.length < 2) return;
-    if (sw && !word.startsWith(sw)) return;
-    if (ew && !word.endsWith(ew))   return;
-    if (ct && !word.includes(ct))   return;
+    if (swRe && !swRe.test(word)) return;
+    if (ewRe && !ewRe.test(word)) return;
+    if (ctRe && !ctRe.test(word)) return;
     const wilds = canMake(word, fullPool);
     if (wilds !== null) { seen.add(word); matched.push({word, wilds}); }
   });
